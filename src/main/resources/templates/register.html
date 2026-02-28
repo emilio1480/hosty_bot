@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Beje nje rezervim</title>
+</head>
+<body>
+<h2>Beje nje rezervim</h2>
+
+<form th:action="@{/save}" th:object="${reservation}" method="post">
+    <div>
+        <label>Emri juaj i plote *</label>
+        <input type="text" th:field="*{name}" required />
+    </div>
+    <div>
+        <label>Dhoma</label>
+        <input type="number" th:field="*{roomId}" />
+    </div>
+    <input type="text" value="Empty" style="visibility: hidden" th:field="*{code}" />
+    <button type="submit">Rezervo</button>
+</form>
+</body>
+</html>
