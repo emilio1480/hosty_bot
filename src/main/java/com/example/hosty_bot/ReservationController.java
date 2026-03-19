@@ -4,13 +4,16 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @org.springframework.stereotype.Controller
 public class ReservationController {
     private final ReservationService service;
+    private final EmailService emailService;
 
-    public ReservationController(ReservationService service) {
+    public ReservationController(ReservationService service, EmailService emailService) {
         this.service = service;
+        this.emailService = emailService;
     }
 
     @GetMapping("/register")
@@ -21,8 +24,12 @@ public class ReservationController {
 
     @PostMapping("/save")
     public String save(@ModelAttribute Reservation reservation){
+        reservation.setName(reservation.getName().trim().toLowerCase());
         Reservation res = service.save(reservation);
-        service.setCode(res.getId());
-        return "register";
+        String code = service.setCode(res.getId());
+
+        String content = "Your code: " + code + " your name: " + res.getName();
+        emailService.sendEmail(reservation.getEmail(),"Your unique code for your room", content);
+        return "redirect:/room.html";
     }
 }
