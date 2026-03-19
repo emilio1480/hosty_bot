@@ -11,8 +11,17 @@ public class Reservation {
     private Long id;
     @Column(nullable = false)
     private String name;
+    private String email;
     private Integer roomId;
     private String code;
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
     public Long getId() {
         return id;
