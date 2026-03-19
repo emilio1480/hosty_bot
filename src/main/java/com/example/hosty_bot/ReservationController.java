@@ -32,4 +32,10 @@ public class ReservationController {
         emailService.sendEmail(reservation.getEmail(),"Your unique code for your room", content);
         return "redirect:/room.html";
     }
+
+    @PostMapping("/getRoom")
+    public String getRoom(@RequestParam String code, @RequestParam String name){
+        System.out.println("ROOM NUMBER FOR: code=" + code  + " name=" + name + " is: " + service.getRoomIdByCodeAndName(code, name));
+        return "redirect:/room.html";
+    }
 }
