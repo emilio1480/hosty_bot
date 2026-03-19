@@ -21,11 +21,12 @@ public class ReservationService {
         repository.deleteById(id);
     }
 
-    public void setCode(Long id){
+    public String setCode(Long id){
         Reservation res = repository.findById(id).orElseThrow(() -> new RuntimeException("Reservation does not exist"));
         int code = random.nextInt(999999);
         res.setCode(String.format("%06d", code));
         repository.save(res);
+        return String.format("%06d", code);
     }
 
     public Integer getRoomIdByCodeAndName(String code, String name){
