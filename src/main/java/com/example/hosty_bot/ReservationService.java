@@ -30,6 +30,10 @@ public class ReservationService {
     }
 
     public Integer getRoomIdByCodeAndName(String code, String name){
-        return repository.getRoomIdByCodeAndName(code, name);
+        return repository.getRoomIdByCodeAndName(code, name).orElse(-1);
+    }
+
+    public Integer getRoomIdByCode(String code){
+        return repository.getRoomIdByCode(code).orElse(-1);
     }
 }
