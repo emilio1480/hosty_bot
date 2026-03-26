@@ -1,12 +1,9 @@
 package com.example.hosty_bot;
 
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RestController;
 
-@org.springframework.stereotype.Controller
+@RestController
 public class ReservationController {
     private final ReservationService service;
     private final EmailService emailService;
@@ -16,26 +13,27 @@ public class ReservationController {
         this.emailService = emailService;
     }
 
-    @GetMapping("/register")
-    public String page(Model model){
-        model.addAttribute("reservation", new Reservation());
-        return "register";
-    }
-
-    @PostMapping("/save")
-    public String save(@ModelAttribute Reservation reservation){
-        reservation.setName(reservation.getName().trim().toLowerCase());
+    @PostMapping("/registerClient")
+    public void save(@RequestBody Reservation reservation){
         Reservation res = service.save(reservation);
         String code = service.setCode(res.getId());
 
-        String content = "Your code: " + code + " your name: " + res.getName();
+        String content = "Your code: " + code + "\nYour name: " + res.getName() + "\nYour room: " + reservation.getRoom();
         emailService.sendEmail(reservation.getEmail(),"Your unique code for your room", content);
-        return "redirect:/room.html";
     }
 
     @PostMapping("/getRoom")
-    public String getRoom(@RequestParam String code, @RequestParam String name){
+    public void getRoom(@RequestParam String code, @RequestParam String name){
         System.out.println("ROOM NUMBER FOR: code=" + code  + " name=" + name + " is: " + service.getRoomIdByCodeAndName(code, name));
-        return "redirect:/room.html";
+    }
+
+    @PostMapping("/getRoomByCodeAndNumber")
+    public Integer getRoomByCodeAndNumber(@RequestBody UserInformation userInfo){
+        return service.getRoomIdByCodeAndName(userInfo.code(), userInfo.name());
+    }
+
+    @PostMapping("/getRoomByCode")
+    public Integer getRoomByCode(@RequestBody UserInformation userInfo){
+        return service.getRoomIdByCode(userInfo.code());
     }
 }
