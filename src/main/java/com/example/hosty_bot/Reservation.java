@@ -13,10 +13,19 @@ public class Reservation {
     private String name;
     private String email;
     private Integer roomId;
+    private String room;
     private String code;
 
     public String getEmail() {
         return email;
+    }
+
+    public String getRoom() {
+        return room;
+    }
+
+    public void setRoom(String room) {
+        this.room = room;
     }
 
     public void setEmail(String email) {
